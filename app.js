@@ -4,12 +4,14 @@ const app=express();
 const bodyParser=require("body-parser");
 const mongoose=require('mongoose');
 const User=require('./models/users');
+const Car=require('./models/car');
 const MongoDB=require('./config/dev');
 const session=require('express-session');
 const cookieParser=require('cookie-parser');
 const passport=require('passport');
 const bcrypt=require('bcryptjs');
 const {requireLogin,ensureGuest}=require('./helpers/authhelper');
+const {upload}=require('./helpers/aws');
 require('./passport/local');
 const formidable=require('formidable');
 app.set('view engine','ejs');
@@ -77,13 +79,17 @@ app.post('/register',(req,res)=>{
 
             }
             else{
+
                 let salt=bcrypt.genSaltSync(10);
                 let hash=bcrypt.hashSync(req.body.password,salt);
+                
                 const newuser={
                     firstname:req.body.firstname,
                     lastname:req.body.lastname,
                     email:req.body.email,
                     password:hash,
+                    phone:req.body.phone
+                    
 
                 }
                 console.log(newuser);
@@ -168,19 +174,54 @@ app.get('/listcar',requireLogin,function(req,res){
     res.render('listcar',{})
 });
 app.post('/listcar',function(req,res){
-    console.log(req.body);
+    console.log(req.body.image);
+    const s="https://carrentalapp6459.s3.ap-south-1.amazonaws.com/"+req.body.image;
+    const newcar={
+        owner:req.user._id,
+        make:req.body.make,
+        model:req.body.model,
+        year:req.body.year,
+        priceperhour:req.body.priceperhour,
+        priceperweek:req.body.priceperweek,
+        location:req.body.location,
+        image:s,
+        type:req.body.type
+
+    }
+    new Car(newcar).save((err,car)=>{
+        if(err)
+        {
+            console.log("fail");
+        }
+        if(car)
+        {
+            console.log(car);
+            res.redirect('/showcar');
+
+        }
+    })
+
 });
-app.post('/uploadImage',function(req,res){
+app.post('/uploadImage',upload.any(),function(req,res){
     const form=new formidable.IncomingForm();
     form.on('file',(field,file)=>{
         console.log(file);
     });
     form.on('error',(err)=>{
-        console.lof(err);
+        console.log(err);
     });
     form.on('end',()=>{
         console.log("success");
     });
     form.parse(req);
+
+});
+app.get('/showcar',requireLogin,function(req,res){
+    Car.find({})
+    .populate('owner')
+    .sort({data:'desc'})
+    .then((cars)=>{
+        res.render('showcar',{cars:cars});
+    })
 
 });

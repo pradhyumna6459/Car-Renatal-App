@@ -17,13 +17,25 @@
   <%- include('partials/navbar.ejs') %>
   <div class="container">
     <h2 class="center">Profile Page</h2>
-    <div class="card" style="width: 18rem;">
-        <img class="card-img-top" src="<%= user.image%>"  alt="Card image cap">
-        <div class="card-body">
-          <h5 class="card-title"><%= user.firstname %> <%= " "%> <%= user.lastname %></h5>
-
+    <div class="row row-style">
+      <div class="col-lg-6">
+        <div class="card" style="width: 18rem;">
+          <img class="card-img-top" src="<%= user.image%>"  alt="Card image cap">
+          <div class="card-body">
+            <h5 class="card-title"><%= user.firstname %> <%= " "%> <%= user.lastname %></h5>
+  
+          </div>
         </div>
       </div>
+      <div class="col-lg-6">
+        <h4>First Name :<strong><%= user.firstname %> </strong></h4>
+        <h4>Last Name:<strong><%= user.lastname %> </strong></h4>
+        <h4>Email: <strong><%= user.email %> </strong></h4>
+      
+      </div>
+
+    </div>
+   
   </div>
 
     <footer>

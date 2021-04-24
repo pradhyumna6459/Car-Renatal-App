@@ -14,32 +14,25 @@ const carSchema={
     year:{
         type:Number
     },
+    type:{
+        type:String
+    },
     priceperhour:{
         type:Number
     },
     priceperweek:{
         type:Number
     },
-    location:[{
-        address:{
-            type:String
-        },
-        city:{
-            type:String
-        },
-        state:{
-            type:String
-        },
-        lat:{
-            type:Number
-        },
-        lng:{
-            type:Number
-        }
-    }],
+    location:{
+        type:String,
+        default:""
+    },
     date:{
         type:Date,
         default:Date.now
+    },
+    image:{
+        type:String,
     }
 }
-module.exports=mongoose.model('car',carSchema);
+module.exports=mongoose.model('Car',carSchema);

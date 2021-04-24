@@ -27,6 +27,9 @@ const userSchema=new Schema({
         type:Date,
         default:Date.now
     },
+    phone:{
+        type:String
+    },
     online:{
         type:Boolean,
         default:false

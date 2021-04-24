@@ -21,3 +21,9 @@ footer{
 a.one{
     color:aliceblue;
 }
+.row-style{
+    padding: 5%;
+}
+.card{
+    margin: 2%;
+}
