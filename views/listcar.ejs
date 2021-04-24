@@ -13,10 +13,69 @@
 <script src="https://use.fontawesome.com/releases/v5.15.2/js/all.js" data-auto-replace-svg="nest"></script>    
 <link rel="stylesheet" href="css/styles.css">
     <script src="/script.js"></script>
+
 </head>
 <body>
     <%- include('partials/navbar.ejs') %>
-    <h1>List a Car</h1>
+    <div class="container mt-5">
+        <h1>List a Car</h1>
+        <div class="row">
+          <div class="col-sm-8">
+            <div class="card">
+              <div class="card-body">
+      
+                <!-- Makes POST request to /register route -->
+                <form action="/listcar" method="POST">
+                  <div class="form-group">
+                    <label for="Make">Make or Brand</label>
+                    <input type="text" class="form-control" name="make" id="make">
+                  </div>
+                  <div class="form-group">
+                    <label for="model">Model</label>
+                    <input type="text" class="form-control" name="model" id="model">
+                  </div>
+                  <div class="form-group">
+                    <label for="year">year</label>
+                    <input type="number" class="form-control" name="year" id="year">
+
+                  </div>
+                  <div class="form-group">
+                    <label for="type">Type
+                    </label>
+                    <select name="type" id="type" class="form-control">
+                        <option value="economy">Economy</option>
+                        <option value="suv">Suv</option>
+                        <option value="vintage">Vintage</option>
+                    </select>
+
+                  </div>
+                  <div class="form-group">
+                    <label for="priceperhour">Price Per Hour</label>
+                    <input type="number" class="form-control" name="priceperhour" id="priceperhour">
+                  </div>
+                  <div class="form-group">
+                    <label for="priceperweek">Price Per week</label>
+                    <input type="number" class="form-control" name="priceperweek" id="priceperweek">
+                  </div>
+                  <div class="form-group">
+                    <label for="location">location</label>
+                    <input type="text" class="form-control" name="location" id="location" placeholder="address,city,state">
+
+                  </div>
+                  <div class="form-group">
+                    
+                    <button class="btn btn-info upload-btn" type="button">Choose image</button>
+                    <input type="file" class="form-control" name="image" id="upload-input" style="display: none;">
+
+                  </div>
+              
+      
+                  <button type="submit" class="btn btn-primary">List a Car</button>
+                </form>
+      
+              </div>
+            </div>
+          </div>
     <footer>
                    
         <div class="icon-div">
@@ -30,7 +89,46 @@
 
         </div>
     </footer>
+
 </div>
+<script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBcX-iZQh1lJdVQb3d-RN3lG8UmIwscRYI&libraries=places&callback=fetchLocation">
+</script>
+
+<script>
+  function fetchLocation()
+  {
+    var location=document.getElementById('location');
+    var Autocomplete=new google.maps.places.Autocomplete(location);
+  }
+
+  $(document).ready(function(){
+    $('.upload-btn').on('click',function(){
+      $('#upload-input').click();
+
+    });
+      $('#upload-input').on('change',function(){
+        var uploadInput=$('#upload-input');
+        if(uploadInput.val()!='')
+        {
+          var formData=new FormData();
+          formData.append('image',uploadInput[0].files[0]);
+          $.ajax({
+            url:'/uploadImage',
+            type:'POST',
+            data:formData,
+            processData:false,
+            contentType:false,
+            success:function(){
+              uploadInput.val('');
+            }
+          })
+        }
+      })
+    });
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
 </body>
 </html>
 

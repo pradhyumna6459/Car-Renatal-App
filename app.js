@@ -11,6 +11,7 @@ const passport=require('passport');
 const bcrypt=require('bcryptjs');
 const {requireLogin,ensureGuest}=require('./helpers/authhelper');
 require('./passport/local');
+const formidable=require('formidable');
 app.set('view engine','ejs');
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({
@@ -165,4 +166,21 @@ app.get('/logout',function(req,res) {
 });
 app.get('/listcar',requireLogin,function(req,res){
     res.render('listcar',{})
+});
+app.post('/listcar',function(req,res){
+    console.log(req.body);
+});
+app.post('/uploadImage',function(req,res){
+    const form=new formidable.IncomingForm();
+    form.on('file',(field,file)=>{
+        console.log(file);
+    });
+    form.on('error',(err)=>{
+        console.lof(err);
+    });
+    form.on('end',()=>{
+        console.log("success");
+    });
+    form.parse(req);
+
 });
