@@ -33,6 +33,9 @@ const carSchema=new Schema({
     },
     image:{
         type:String,
+    },
+    wallet:{
+        type:Number
     }
 });
 module.exports=mongoose.model('Car',carSchema);

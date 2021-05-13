@@ -1,3 +1,4 @@
+// express and some basic packages
 const express=require('express');
 const ejs=require('ejs');
 const socketIO=require('socket.io');
@@ -5,10 +6,15 @@ const http=require('http');
 const app=express();
 const bodyParser=require("body-parser");
 const mongoose=require('mongoose');
+// models
 const User=require('./models/users');
 const Car=require('./models/car');
 const Chat=require('./models/chat');
+const Budjet=require('./models/budjet');
+// models end
+//mongdb
 const MongoDB=require('./config/dev');
+//auth
 const session=require('express-session');
 const cookieParser=require('cookie-parser');
 const passport=require('passport');
@@ -17,6 +23,8 @@ const {requireLogin,ensureGuest}=require('./helpers/authhelper');
 const {upload}=require('./helpers/aws');
 require('./passport/local');
 const formidable=require('formidable');
+
+
 app.set('view engine','ejs');
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({
@@ -248,14 +256,59 @@ app.get('/RentNow/:id',(req,res)=>{
         }
         if(car)
         {
+            console.log(car.owner);
             res.render('calculate',{
                 car:car
             })
         }
     })
 });
+app.post('/calulateTotal/:id',(req,res)=>{
+    Car.findOne({_id:req.params.id},function(err,car)
+    {
+        if(err)
+        {
+            console.log(err);
+        }
+        if(car)
+        {
+            const hour=parseInt(req.body.hour);
+            const week=parseInt(req.body.week);
+            var total=hour*car.priceperhour+week*car.priceperweek;
+            const budjet={
+                carID:req.params.id,
+                total:total,
+                renter:req.user._id,
+                date:new Date
 
-//socket connection
+            }
+            new Budjet(budjet).save(function(err,budjet)
+            {
+                if(err)
+                {
+                    console.log(err);
+                }
+                if(budjet)
+                {
+                    Car.findOne({_id:req.params.id},function(err,car)
+                    {
+                        if(err)
+                        {
+                            console.log(err);
+                        }
+                        if(car)
+                        {
+                            res.render('checkout',{budjet:budjet,car:car});
+                        }
+                    })
+                }
+            })
+        }
+    })
+});
+
+
+//socket connection server-client interaction
 const server=http.createServer(app);
 const io=socketIO(server);
 io.on('connection',(socket)=>{

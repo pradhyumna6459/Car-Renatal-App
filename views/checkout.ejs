@@ -69,23 +69,12 @@
                 
                     </li>
             </ul>
-            <form action="/calulateTotal/<%= car._id %>" method="post">
+            <form action="/calulateRenter/<%= car._id %>" method="post">
                 <div class="form-group">
-                    <label for="hour"><strong>How long do you rent</strong></label>
-                    <select name="hour" class="form-control">
-                        <% for(var i=0;i<=24;i++){%>
-                            <option value= <%= i %>><%= i %> hr</option>
-                        <%}%>
+                    <label for=""><h1>Total amount is ₹   <%= budjet.total %></h1></label>
 
-                    </select>
-                    <select name="week" class="form-control">
-                        <% for(var i=0;i<=10;i++){%>
-                            <option value= <%= i %>><%= i %> week</option>
-                        <%}%>
-
-                    </select>
                 </div>
-                    <button type="submit" class="btn btn-primary">Calulate Total</button>
+                    <button type="submit" class="btn btn-primary">Pay Now</button>
             </form>
             <strong>Note ** all document related to car will be given at time of pick up </strong>
             <br>
