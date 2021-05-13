@@ -3,6 +3,8 @@ const express=require('express');
 const ejs=require('ejs');
 const socketIO=require('socket.io');
 const http=require('http');
+const keys=require('./config/dev');
+const stripe=require('stripe')(keys.StripeSecreatKey);
 const app=express();
 const bodyParser=require("body-parser");
 const mongoose=require('mongoose');
@@ -23,6 +25,7 @@ const {requireLogin,ensureGuest}=require('./helpers/authhelper');
 const {upload}=require('./helpers/aws');
 require('./passport/local');
 const formidable=require('formidable');
+const { Budgets } = require('aws-sdk');
 
 
 app.set('view engine','ejs');
@@ -298,7 +301,8 @@ app.post('/calulateTotal/:id',(req,res)=>{
                         }
                         if(car)
                         {
-                            res.render('checkout',{budjet:budjet,car:car});
+                            
+                            res.render('checkout',{budjet:budjet,car:car, StripePublishableKey:keys.StripePublishableKey});
                         }
                     })
                 }
@@ -306,6 +310,42 @@ app.post('/calulateTotal/:id',(req,res)=>{
         }
     })
 });
+app.post('/calulateRenter/:id',(req,res)=>{
+    Budjet.findOne({_id:req.params.id})
+    .populate('renter')
+    .then((budjet)=>{
+        const amount=budjet.total;
+        stripe.customers.create({
+            email:req.body.stripeEmail,
+            source:req.body.stripeToken
+        })
+        .then((customer)=>{
+            stripe.charges.create({
+                amount:amount,
+                description:'$${budjet.total} for renting a car',
+                currency:'inr',
+                customer:customer.id,
+                receipt_email:customer.email
+            },(err,charge)=>{
+                if(err)
+                {
+                    console.log(err);
+                }
+                if(charge){
+                    console.log(charge);
+                    console.log("success");
+                    res.render('success',
+                    {charge:charge,budjet:budjet});
+                }
+            })
+        }).catch((err)=>{
+            console.log(err);
+        })
+
+    }).catch((err)=>{
+        console.log(err);
+    })
+})
 
 
 //socket connection server-client interaction

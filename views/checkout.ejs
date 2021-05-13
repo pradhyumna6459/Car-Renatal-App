@@ -69,12 +69,20 @@
                 
                     </li>
             </ul>
-            <form action="/calulateRenter/<%= car._id %>" method="post">
+            <form action="/calulateRenter/<%= budjet._id %>" method="post">
+                <script src="https://checkout.stripe.com/checkout.js"
+                data-key= "<%= StripePublishableKey %>"
+                class="stripe-button"
+                data-amount="<%= budjet.total *(100/72)%>"
+                data-name="Car Rental"
+                data-description= "₹  <%= budjet.total %> for renting a <%= car.make %> <%= car.model %>"" 
+                >
+                </script>
                 <div class="form-group">
                     <label for=""><h1>Total amount is ₹   <%= budjet.total %></h1></label>
 
                 </div>
-                    <button type="submit" class="btn btn-primary">Pay Now</button>
+                    
             </form>
             <strong>Note ** all document related to car will be given at time of pick up </strong>
             <br>
