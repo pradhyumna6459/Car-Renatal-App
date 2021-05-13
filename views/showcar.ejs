@@ -12,7 +12,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="https://use.fontawesome.com/releases/v5.15.2/js/all.js" data-auto-replace-svg="nest"></script>    
 <link rel="stylesheet" href="css/styles.css">
-    <script src="/script.js"></script>
+    
 
 </head>
 <body>
@@ -23,8 +23,30 @@
                     <div class="card" style="width: 18rem;">
                         <img class="card-img-top" src="<%= cars[i].image %>" alt="Card image cap">
                         <div class="card-body">
-                          <h5 class="card-title"><%= cars[i].owner.firstname %> <%= cars[i].owner.lastname %></h5>
-                          <p class="card-text">Cars Details</p>
+                        <h5 class="card-title"><%= cars[i].make %> <%= cars[i].model %></h5>
+                          
+                          <p class="card-text">Owner Details</p>
+                          <ul>
+                            <li>
+                                
+                              <p class="card-text">Name:<strong><%= cars[i].owner.firstname %> <%= cars[i].owner.lastname %></strong></p>
+                            </li>
+                            <li>
+                              <p class="card-text">Phone:<strong><%= cars[i].owner.phone %></strong></p> 
+                          </li>
+                          <li>
+                              <p class="card-text">Email:<strong><%= cars[i].owner.email %></strong></p>
+                          </li>
+                          <li>
+                              <a href="/contactowner/<%= cars[i].owner._id  %>" class="btn btn-primary">Contact Owner</a>
+                        </li>
+                      
+                          
+                          
+                          
+                          
+                        </ul>
+                          <p class="card-text">Car Details</p>
                           <ul>
                               <li>
                                   
@@ -47,7 +69,7 @@
                             
                             
                           </ul>
-                        <p class="card-text">Cars Pricing</p>
+                        <p class="card-text">Car Pricing</p>
                         <ul>
                             <li>
                                 <p class="card-text">Price-Per-Hour:<%= "₹ " %><strong><%= cars[i].priceperhour %></strong></p>
@@ -82,7 +104,9 @@
 
 </div>
 
-    
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script src="/script.js"></script>
 </body>
 </html>
 

@@ -33,6 +33,12 @@ const userSchema=new Schema({
     online:{
         type:Boolean,
         default:false
-    }
+    },
+    chat:[{
+        sender:{
+            type:Schema.Types.ObjectId,
+            ref:'User'
+        },
+    }]
 });
 module.exports=mongoose.model('User',userSchema);

@@ -27,3 +27,10 @@ a.one{
 .card{
     margin: 2%;
 }
+#list{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 600px;
+    height: 400px;
+    overflow-y: scroll;
+}

@@ -5,58 +5,56 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DoomCars</title>
+    
+    
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://use.fontawesome.com/releases/v5.15.2/js/all.js" data-auto-replace-svg="nest"></script>   
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="css/home.css">
+<link rel="stylesheet" href="css/styles.css">
     
 </head>
 <body>
-  
   <%- include('partials/navbar.ejs') %>
-      
-      
-      <div class="backgroundclass">
-          <h2 class="center">Hello Hola Namaste!</h2>
-          <h2 class="center">Welcome to doom cars</h2>
   
-              
-          <h2 class="center"><a href="/auth/facebook" class="btn btn-primary">Login With Facebook</a></h2>
+  <div class="container">
+    <h1 style="text-align: center;">Chat Room</h1>
+      <ul id="list" style="margin-top: 10px; margin-bottom: 10px; width: 600px; height: 400px; overflow-y: scroll;">
+
+        <% if(chat===undefined) {%>
+            <p>No message</p>
+
+        <% }%>
+        <% for(var j=0;j<chat.dialogue.length;j++){%>
+            <h3><%=chat.dialogue[j].sender.firstname %></h3>
+            <h3><%=chat.dialogue[j].senderMessage %></h3>
+            <small><%=chat.dialogue[j].date %></small>
+            <hr>
+            <% if(chat.dialogue[j].receiverMessage){%>
+                <h3><%=chat.dialogue[j].receiver.firstname %></h3>
+                <h3><%=chat.dialogue[j].receiverMessage %></h3>
+                <small><%=chat.dialogue[j].date %></small>
+                <hr>
+            <%}%>
+
+           
+        <%}%>
+         
           
-          <h2 class="center"><a href="/email" class="btn btn-primary">Login with Email</a></h2>
-          <h4 class="center">
-              <a class="link" href="/signup">
-              Need An Account?
-              </a>
-          </h4>
-              
-          </h2>
-      
-        </div>
-        <footer>
-                   
-          <div class="icon-div">
-              <a href="https://github.com/pradhyumna6459"><i  class=" icon-img fab fa-github fa-2x"></i></a>
-              <a href="https://www.instagram.com/pradhyumna.singhrathore/"><i class="icon-img fab fa-instagram fa-2x"></i></a>
-              <a href="https://www.facebook.com/pradhyumnasingh.rathore.3/"><i class="icon-img fab fa-facebook-square fa-2x"></i></a>
-              <a href="https://www.linkedin.com/in/pradhyumna-singh-rathore-b6a767177/"><i  class="icon-img fab fa-linkedin fa-2x"></i></a>
-              <p >
-                  copyright @pradhyumna 2021
-              </p>
-  
-          </div>
-      </footer>
-      
+      </ul>
+      <form action="/chat/<%= chat._id %>" method="POST">
+          <input type="text" name="message" class="form-control">
+          <button type="submit" class="btn btn-primary btn1" style="margin-top: 10px;">Send</button>
+      </form>
+
+  </div>
 
 
 
-</div>
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script src="/script.js"></script>
 </body>
 </html>
-
 

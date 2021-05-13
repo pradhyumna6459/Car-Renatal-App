@@ -1,10 +1,13 @@
 const express=require('express');
 const ejs=require('ejs');
+const socketIO=require('socket.io');
+const http=require('http');
 const app=express();
 const bodyParser=require("body-parser");
 const mongoose=require('mongoose');
 const User=require('./models/users');
 const Car=require('./models/car');
+const Chat=require('./models/chat');
 const MongoDB=require('./config/dev');
 const session=require('express-session');
 const cookieParser=require('cookie-parser');
@@ -49,9 +52,7 @@ app.get('/contact',function(req,res){
 app.get('/signup',ensureGuest,function(req,res){
     res.render('signup',{err:[]});
 });
-app.listen(port,function(req,res){
-    console.log("app is running at "+port);
-});
+
 app.post('/register',(req,res)=>{
     let err=[]
     if(req.body.password!==req.body.password2)
@@ -120,7 +121,7 @@ app.post('/login',passport.authenticate('local',{
 }));
 app.get('/loginerr',function(req,res)
 {
-    res.render('loginerr',{err:"Your Account doesnot exits you can create your account"});
+    res.render('loginerr',{err:"Your Account doesnot exits you can create your account or worong password"});
 });
 app.get('/profile',requireLogin,function(req,res)
 {
@@ -171,7 +172,7 @@ app.get('/logout',function(req,res) {
     
 });
 app.get('/listcar',requireLogin,function(req,res){
-    res.render('listcar',{})
+    res.render('listcar',{});
 });
 app.post('/listcar',function(req,res){
     console.log(req.body.image);
@@ -196,7 +197,7 @@ app.post('/listcar',function(req,res){
         if(car)
         {
             console.log(car);
-            res.redirect('/showcar');
+            res.redirect('/listcar');
 
         }
     })
@@ -219,9 +220,177 @@ app.post('/uploadImage',upload.any(),function(req,res){
 app.get('/showcar',requireLogin,function(req,res){
     Car.find({})
     .populate('owner')
-    .sort({data:'desc'})
+    .sort({priceperhour:'asc'})
     .then((cars)=>{
         res.render('showcar',{cars:cars});
     })
 
 });
+app.get('/contactowner/:id',requireLogin,function(req,res){
+    const ownerid=req.params.id;
+    User.findOne({_id:ownerid},function(err,owner)
+    {
+        if(owner)
+        {
+            res.render('ownerprofile',{owner:owner});
+        }
+
+    })
+
+
+});
+
+//socket connection
+const server=http.createServer(app);
+const io=socketIO(server);
+io.on('connection',(socket)=>{
+    console.log("Connected to client");
+    app.get('/chatowner/:id',requireLogin,function(req,res){
+        Chat.findOne({sender:req.params.id,receiver:req.user._id})
+        .then((chat)=>{
+            if(chat){
+                chat.date=new Date();
+                chat.senderRead=false;
+                chat.receiverRead=true;
+                chat.save()
+                .then((chat)=>{
+                    const id1='/chat/'+chat._id;
+                    res.redirect(id1);
+                }).catch((err)=>{console.log(err)});
+            }
+            else{
+                Chat.findOne({sender:req.user._id,receiver:req.params.id})
+                .then((chat)=>{
+                    if(chat)
+                    {   
+                        chat.date=new Date();
+                        chat.senderRead=true;
+                        chat.receiverRead=false;
+                        chat.save()
+                        .then((chat)=>{
+                            const id1='/chat/'+chat._id;
+                            res.redirect(id1);
+                        }).catch((err)=>{console.log(err)});
+
+                    }
+                    else{
+                       
+
+
+                        const newChat={
+                            sender:req.user._id,
+                            receiver:req.params.id,
+                            date:new Date()
+                        }
+                        new Chat(newChat).save()
+                        .then((chat)=>{
+                            console.log(chat.id);
+                            User.findOne({_id:req.user._id},function(err,user)
+                            {
+                                if(err)
+                                {
+                                    console.log(err);
+                                }
+                                if(user)
+                                {
+                                    user.chat.push(chat._id);
+                                   
+                                    user.save(function(err,user)
+                                    {
+                                        if(err)
+                                        {
+                                            console.log(err);
+                                        }
+                                    });
+                                }
+                            });
+                            
+                            User.findOne({_id:req.params.id},function(err,user)
+                                {
+                                    if(err)
+                                    {
+                                        console.log(err);
+                                    }
+                                    if(user)
+                                    {
+                                        
+                                        user.chat.push(chat._id);
+                                        user.save(function(err,user)
+                                        {
+                                            if(err)
+                                            {
+                                                console.log(err);
+                                            }
+                                        });
+                                    }
+                                });
+                            const id1='/chat/'+chat._id;
+                            res.redirect(id1);
+
+                        }).catch((err)=>{
+                            console.log(err);
+                        })
+                    }
+
+                }).catch((err)=>{console.log(err)});
+            }
+
+        }).catch((err)=>{console.log(err)});
+    });
+    //handle post route of message
+    app.post('/chat/:id',(req,res)=>{
+        Chat.findById({_id:req.params.id})
+        .populate('sender')
+        .populate('receiver')
+        .populate('dialogue.sender')
+        .populate('dialogue.receiver')
+        .then((chat)=>{
+            const newDialogue={
+                sender:req.user._id,
+                
+                date:new Date(),
+                senderMessage:req.body.message
+            }
+            chat.dialogue.push(newDialogue)
+            chat.save((err,chat)=>{
+                if(err)
+                {
+                    console.log(err);
+                }
+                if(chat){
+                    Chat.findOne({_id:chat._id})
+                    .populate('sender')
+                    .populate('receiver')
+                    .populate('dialogue.sender')
+                    .populate('dialogue.receiver')
+                    .then((chat)=>{
+                        res.render('chatroom',{chat:chat});
+
+                    }).catch((err)=>{console.log(err)});
+                }
+            })
+        })
+    });
+    // handle /chat/chat._id route
+    app.get('/chat/:id',(req,res)=>{
+        Chat.findOne({_id:req.params.id})
+        .populate('sender')
+        .populate('receiver')
+        .populate('dialogue.sender')
+        .populate('dialogue.receiver')
+        .then((chat)=>{
+            res.render('chatroom',{chat:chat})
+        }).catch((err)=>
+        {
+            console.log(err);
+        })
+    }) 
+    socket.on('disconnect',(socket)=>{
+        console.log("Disconnected from client");
+
+    });
+});
+server.listen(port,function(req,res){
+    console.log("app is running at "+port);
+});
+
