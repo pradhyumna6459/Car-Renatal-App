@@ -239,6 +239,21 @@ app.get('/contactowner/:id',requireLogin,function(req,res){
 
 
 });
+app.get('/RentNow/:id',(req,res)=>{
+    const carid=req.params.id;
+    Car.findOne({_id:carid},function(err,car){
+        if(err)
+        {
+            console.log(err);
+        }
+        if(car)
+        {
+            res.render('calculate',{
+                car:car
+            })
+        }
+    })
+});
 
 //socket connection
 const server=http.createServer(app);
