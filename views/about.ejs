@@ -6,21 +6,138 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DoomCars</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    
+    <script src="https://use.fontawesome.com/releases/v5.15.2/js/all.js" data-auto-replace-svg="nest"></script> 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/styles.css">
     
 </head>
 <body>
   <%- include('partials/navbar.ejs') %>
-    <div class="container">
-    <p>Car rentnal is a web app that allow you to make money out of your cars by rentening your car on our web site</p>
-    <p>Contact us if you have any query on link given below</p>
-    <a href="/contact">Contact us</a>
-    <small>Copyright @prd2021</small>
-</div>
+  <div class="about">
+   <h4>Doom Car is a Web app which help you to make money from car You can also rent car from this application .</h4>
+   <h4 style="color: rgb(15, 139, 255);">*In this Covid time you can rent cars from free for covid patient</h4> 
+
+   
+   <h4 style="text-align: center;">How Doom Car Works</h4>
+   <p style="text-align: center;">Drive yourself to an adventure and back in 4 simple steps</p>
+   <div class="row" style="margin: 3px;">
+       <div class="col-lg-3">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">Book the car</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Step 1</h6>
+              <p class="card-text">Search for and book a car on our site!</p>
+  
+            </div>
+          </div>
+
+
+       </div>
+       <div class="col-lg-3">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">Unlock</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Step 2</h6>
+              <p class="card-text">Unlock your car just by paying a amount according to your need!</p>
+  
+            </div>
+          </div>
+           
+
+    </div>
+    <div class="col-lg-3">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">Doom</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Step 3</h6>
+              <p class="card-text"> Grab the keys from owner and pick the from owner address</p>
+  
+            </div>
+          </div>
+
+    </div>
+    <div class="col-lg-3">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">Return</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Step 4</h6>
+              <p class="card-text"> Return the car to the same location</p>
+  
+            </div>
+          </div>
+
+    </div>
+   </div>
+
+   <h4 style="text-align: center;">How I can Rent My Car</h4>
+   <p style="text-align: center;">There are 4 simple steps for Renting Your Car</p>
+   <div class="row" style="margin: 3px;">
+    <div class="col-lg-3">
+     <div class="card" style="width: 18rem;">
+         <div class="card-body">
+           <h5 class="card-title">Create Account</h5>
+           <h6 class="card-subtitle mb-2 text-muted">Step 1</h6>
+           <p class="card-text">Create account on doomcar web app</p>
+           <a href="/signup" class="card-link">Sign Up</a>
+           
+           <a href="/email" class="card-link">Login</a>
+
+         </div>
+         
+       </div>
+
+
+    </div>
+   
+    <div class="col-lg-3">
+     <div class="card" style="width: 18rem;">
+         <div class="card-body">
+           <h5 class="card-title">List a car </h5>
+           <h6 class="card-subtitle mb-2 text-muted">Step 2</h6>
+           <p class="card-text">List your car in our web app just by filling a simple form </p>
+           <a href="/listcar" class="card-link">List Your Car</a>
+
+         </div>
+       </div>
+        
+
+ </div>
+ <div class="col-lg-3">
+     <div class="card" style="width: 18rem;">
+         <div class="card-body">
+           <h5 class="card-title">Chat with Client</h5>
+           <h6 class="card-subtitle mb-2 text-muted">Step 3</h6>
+           <p class="card-text">You can chat with user who want your car and user will pay you and pick car from pick up point</p>
+
+         </div>
+       </div>
+
+ </div>
+ <div class="col-lg-3">
+     <div class="card" style="width: 18rem;">
+         <div class="card-body">
+           <h5 class="card-title">Amount Receive</h5>
+           <h6 class="card-subtitle mb-2 text-muted">Step 4</h6>
+           <p class="card-text">You will Receive Amount from Doom managnment team</p>
+
+         </div>
+       </div>
+
+ </div>
+ 
+
+
+    
+  </div>
+  <h4 style="text-align: center;">For Any Queries contact to our team they will reach you out shortly</h4>
+  <div style="text-align: center;">
+    <a href="/contact" class="btn btn-primary" style="margin-bottom: 5%; ">Contact us</a></div>
+  
+  <%- include('partials/footer.ejs') %>
+  
+
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script src="/script.js"></script>

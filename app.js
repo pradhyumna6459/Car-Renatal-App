@@ -54,7 +54,7 @@ const port=3000;
 app.get('/',ensureGuest,function(req,res){
     res.render('home',{title:'Home'});
 });
-app.get('/about',ensureGuest,function(req,res){
+app.get('/about',function(req,res){
     res.render('about',{title:'About'});
 });
 app.get('/contact',function(req,res){

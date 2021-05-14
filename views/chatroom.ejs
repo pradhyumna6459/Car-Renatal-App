@@ -26,6 +26,7 @@
             <p>No message</p>
 
         <% }%>
+ 
         <% for(var j=0;j<chat.dialogue.length;j++){%>
             <h3><%=chat.dialogue[j].sender.firstname %></h3>
             <h3><%=chat.dialogue[j].senderMessage %></h3>
@@ -44,13 +45,13 @@
           
       </ul>
       <form action="/chat/<%= chat._id %>" method="POST">
-          <input type="text" name="message" class="form-control">
+          <input type="text" name="message" class="form-control" style="width: 50%;">
           <button type="submit" class="btn btn-primary btn1" style="margin-top: 10px;">Send</button>
       </form>
 
   </div>
 
-
+  
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
